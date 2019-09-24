@@ -3,7 +3,7 @@
       <div class="tab-list-box">
         <scroll-view class="tab-list-scroll-view" scroll-y>
           <ul class="tab-list">
-            <li class="tab-item" v-for="(item,index) in 20" :key="index">
+            <li class="tab-item" v-for="(item,index) in cateGory" :key="index" @click="changeCateGory(item,index)">
               <div
                 class="tab-item-title"
                 :class="[
@@ -11,7 +11,7 @@
                       'is-selected': index===select_index
                    }
                 ]"
-              >数码家电</div>
+              >{{item.category_name}}</div>
             </li>
           </ul>
         </scroll-view>
@@ -19,9 +19,9 @@
       <div class="category-list-box">
         <scroll-view scroll-y>
           <ul class="category-list">
-            <li class="category-item" v-for="(item,index) in 20" :key="index">
-              <img src="../../../static/images/phone.png" />
-              <div class="category-name">手机</div>
+            <li class="category-item" v-for="(item,index) in cateGory[select_index].children" :key="index">
+              <img :src="item.img" />
+              <div class="category-name">{{item.name}}</div>
             </li>
           </ul>
         </scroll-view>
@@ -30,11 +30,35 @@
 </template>
 
 <script>
+  import api from '../../config/api'
   export default {
     name: "index",
     data () {
       return {
+        cateGory : [],
         select_index : 0
+      }
+    },
+    created () {
+      this.getCategory()
+    },
+    methods : {
+      getCategory () {
+        wx.showLoading({title:'加载中'})
+        this.$http(api.getCategory).then(res=>{
+          if (res.data.code === 0) {
+            this.cateGory = res.data.categoryData
+            wx.hideLoading()
+          }else {
+            wx.hideLoading()
+            wx.showToast({title:res.data.msg})
+          }
+        }).catch(err => {
+          wx.hideLoading()
+        })
+      },
+      changeCateGory (item,index) {
+        this.select_index = index
       }
     }
   };

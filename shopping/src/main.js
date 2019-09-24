@@ -2,10 +2,12 @@ import Vue from 'vue'
 import App from './App'
 import MpvueRouterPatch from 'mpvue-router-patch'
 import store from './store'
+import request from './config/request'
 
 Vue.prototype.$bus = new Vue()
+Vue.prototype.$store = store;
+Vue.prototype.$http = request
 
-Vue.prototype.$store=store;
 Vue.use(MpvueRouterPatch)
 Vue.config.productionTip = false
 App.mpType = 'app'

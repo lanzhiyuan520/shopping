@@ -1,9 +1,10 @@
 {
   "pages": [
-    "pages/shoppingCar/main",
-    "pages/category/main",
     "pages/index/main",
-    "pages/my/main"
+    "pages/goodsDetail/main",
+    "pages/my/main",
+    "pages/category/main",
+    "pages/shoppingCar/main"
   ],
   "window": {
     "backgroundTextStyle": "light",

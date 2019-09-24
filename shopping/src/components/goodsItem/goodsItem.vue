@@ -1,15 +1,15 @@
 <template>
-    <div class="goods-item">
+    <div class="goods-item" @click="eventsClick">
       <div class="goods-item-img">
-        <img src="../../../static/images/test2.webp" />
+        <img :src="'http://localhost:3006'+goodsImg" />
       </div>
       <div class="goods-item-info">
         <div class="goods-item-title">
-          JackJones杰克琼斯秋季男士中长百搭休闲商务风衣外套219121513
+          {{title}}
         </div>
         <div class="price-of-payment-num">
-          <div class="goods-price color-ff5">￥499</div>
-          <div class="payment-num">100人付款</div>
+          <div class="goods-price color-ff5">￥{{price}}</div>
+          <div class="payment-num">{{sellCount}}人付款</div>
         </div>
       </div>
     </div>
@@ -17,7 +17,27 @@
 
 <script>
   export default {
-    name: "goodsItem"
+    name: "goodsItem",
+    props : {
+      title : {
+        type : String,
+        default : ''
+      },
+      goodsImg : String,
+      price : {
+        type : [String,Number],
+        default : 0
+      },
+      sellCount : {
+        type : [String,Number],
+        default : 0
+      }
+    },
+    methods : {
+      eventsClick () {
+        this.$emit('handClick')
+      }
+    }
   };
 </script>
 

@@ -3,10 +3,10 @@
       class="product-category"
     >
       <scroll-view scroll-x class="product-scroll-view">
-        <ul class="product-list">
-          <li class="product-item" v-for="(item,index) in [1,2,3,4,5,6,7,8,9,1,2,3,4,1]" :key="index">
-            <img src="../../../static/images/nanzhuang.webp" />
-            <p class="product-title">美妆个护</p>
+        <ul class="product-list" :style="{width:listWidth+'px'}">
+          <li class="product-item" v-for="(item,index) in list" :key="index">
+            <img :src="item.img" />
+            <p class="product-title">{{item.name}}</p>
           </li>
         </ul>
       </scroll-view>
@@ -14,8 +14,53 @@
 </template>
 
 <script>
+  import config from '../../config/config'
+  import {mapState} from 'vuex'
   export default {
-    name: "productCategory"
+    name: "productCategory",
+    props : {
+      list : Array,
+      default : []
+    },
+    data () {
+      return {
+        itemWidth : null
+      }
+    },
+    computed : {
+      ...mapState(['listWidth'])
+    },
+    created () {
+      this.$bus.$on('initWidth',this.initWidth)
+    },
+    mounted () {
+
+    },
+    methods : {
+      initWidth () {
+        let that = this
+        let systemInfo = this.$store.state.systemInfo
+        setTimeout(()=>{
+          const query = wx.createSelectorQuery()
+          query.select('.product-item').boundingClientRect()
+          query.selectViewport().scrollOffset()
+          query.exec(function (res) {
+            let addWidth,listWidth,length;
+            that.itemWidth = res[0].width
+            length = that.list.length
+            if (systemInfo.screenWidth >= 768 && systemInfo.screenWidth < 1024 ) {
+              addWidth = 8
+            }else if (systemInfo.screenWidth >= 1024) {
+              addWidth = 12
+            } else {
+              addWidth = 4
+            }
+            listWidth = (length * (that.itemWidth+addWidth))/2
+            that.$store.commit('SETINDEXLISTWIDTH',{width:listWidth})
+          })
+        },100)
+      },
+    }
   };
 </script>
 
@@ -26,7 +71,7 @@
     &>.product-scroll-view{
       width: 100%;
       .product-list{
-        width: 140%;
+        /*width: 200%;*/
         display: flex;
         flex-wrap: wrap;
         .product-item{
@@ -37,7 +82,8 @@
             border-radius: 50%;
           }
           .product-title{
-              font-size: 24rpx;
+            font-size: 24rpx;
+            text-align: center;
           }
         }
       }

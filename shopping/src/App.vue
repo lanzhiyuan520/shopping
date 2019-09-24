@@ -1,6 +1,12 @@
 <script>
 export default {
-
+  mounted () {
+    wx.getSystemInfo({
+      success : res => {
+        this.$store.commit('SYSTEMINFO',res)
+      }
+    })
+  }
 }
 </script>
 
@@ -15,5 +21,8 @@ page {
   width: 100%;
   height: 100%;
   background-color: #eee;
+}
+button::after{
+  border:none;
 }
 </style>

@@ -7,17 +7,18 @@
         </div>
       </div>
       <div class="goods_category">
-        <product-category></product-category>
+        <product-category :list="this.twoCateGory"></product-category>
       </div>
       <div class="goods_list">
-        <goods-item></goods-item>
-        <goods-item></goods-item>
-        <goods-item></goods-item>
-        <goods-item></goods-item>
-        <goods-item></goods-item>
-        <goods-item></goods-item>
-        <goods-item></goods-item>
-        <goods-item></goods-item>
+        <goods-item
+          @handClick="handClick"
+          v-for="(item,index) in goodsList"
+          :key="index"
+          :title="item.name"
+          :goods-img="item.img"
+          :price="item.price"
+          :sell-count="item.all_sell_count"
+        ></goods-item>
       </div>
     </div>
     <div v-else class="search-box">
@@ -32,10 +33,14 @@ import headerBox from '../../components/headerBox/headerBox'
 import productCategory from '../../components/productCategory/productCategory'
 import goodsItem from '../../components/goodsItem/goodsItem'
 import searchView from '../../components/searchView/searchView'
+import api from '../../config/api'
 export default {
   data () {
     return {
-      isShowSearch : false
+      isShowSearch : false,
+      twoCateGory : [],
+      goodsList : [],
+      page : 1
     }
   },
   components : {
@@ -44,15 +49,41 @@ export default {
     goodsItem,
     searchView
   },
-  created () {
-    this.$bus.$on('hideSearchView' , () => {
-      console.log(1111)
-      this.isShowSearch = false
-    })
+  mounted () {
+    this.initEvent()
+    this.getIndexTwocategoryList()
+    this.getIndexGoodsList()
   },
   methods: {
+    //获取分类
+    getIndexTwocategoryList () {
+      this.$http(api.getIndexTwocategoryList).then(res=>{
+        if (res.data.code === 0) {
+          this.twoCateGory = res.data.data
+          this.$bus.$emit('initWidth')
+        }
+      })
+    },
+    getIndexGoodsList () {
+      this.$http(`${api.getRecommendList}?page=${this.page}`).then(res=>{
+        console.log(res)
+        if (res.data.code === 0) {
+          this.goodsList = res.data.data
+        }
+      })
+    },
+    initEvent () {
+      this.$bus.$on('hideSearchView' , () => {
+        this.isShowSearch = false
+      })
+    },
     showSearchView () {
       this.isShowSearch = true
+    },
+    handClick () {
+      this.$router.push({
+        path : '/pages/goodsDetail/main'
+      })
     }
   }
 }
