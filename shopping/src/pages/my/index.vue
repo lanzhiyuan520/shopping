@@ -2,10 +2,18 @@
     <div>
       <div class="head">
         <div class="userinfo-wrap">
-          <div class="user-header-img">
-            <img src="../.././../static/images/default-head.jpeg" />
-          </div>
-          <div class="user-name">兰志远</div>
+          <block v-if="userInfo.nick_name">
+            <div class="user-header-img">
+              <img :src="userInfo.header_img" />
+            </div>
+            <div class="user-name">{{userInfo.nick_name}}</div>
+          </block>
+          <block v-else>
+            <div class="user-header-img">
+              <img src="../../../static/images/default-head.jpeg" />
+            </div>
+            <button class="user-name" open-type="getUserInfo" @getuserinfo="getUserInfo">授权登录</button>
+          </block>
         </div>
         <div class="user-admin">
           <ul class="admin-list">
@@ -67,8 +75,28 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex'
   export default {
-    name: "index"
+    name: "index",
+    data () {
+      return {
+
+      }
+    },
+    computed : {
+      ...mapState(['userInfo'])
+    },
+    methods : {
+      getUserInfo (e) {
+        if (e.mp.detail.errMsg === "getUserInfo:ok") {
+          let data = e.mp.detail.userInfo
+          data.id = this.userInfo.id
+          this.$store.dispatch('AUTHUSERINFO',data)
+        } else {
+          wx.showToast({title : '请允许授权',icon : 'none'})
+        }
+      }
+    }
   };
 </script>
 

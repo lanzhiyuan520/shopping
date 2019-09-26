@@ -4,11 +4,11 @@
         <div class="user-head-img">
           <img src="https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJWFdKjyLOXtDAj0teMnhJng4jibLia8z3fDVhic7WlLpUvDTgTWmugcdaJB4LDfp9mY8ZB7wu5y3oNw/132" />
         </div>
-        <div class="user-name">兰志远</div>
-        <div class="comment-time">2019-10-20</div>
+        <div class="user-name">{{userName}}</div>
+        <div class="comment-time">{{commentTime}}</div>
       </div>
       <div class="comment-content">
-        外形外观：很好啊屏幕音效：很好待机时间：很好其他特色：喜欢运行速度：不错
+        {{commentContent}}
       </div>
       <div class="goods-attr" v-if="isShowAttr">
         <span>颜色：白色</span>

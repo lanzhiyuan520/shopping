@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 100%">
+  <div class="Index">
     <div class="index" v-if="!isShowSearch">
       <div class="header">
         <div class="header-wrap">
@@ -14,6 +14,9 @@
           @handClick="handClick"
           v-for="(item,index) in goodsList"
           :key="index"
+          :id="item.id"
+          :shop-id="item.shop_id"
+          :two-category-id="item.two_category_id"
           :title="item.name"
           :goods-img="item.img"
           :price="item.price"
@@ -51,25 +54,46 @@ export default {
   },
   mounted () {
     this.initEvent()
-    this.getIndexTwocategoryList()
-    this.getIndexGoodsList()
+    this.getIndexData()
   },
   methods: {
     //获取分类
     getIndexTwocategoryList () {
-      this.$http(api.getIndexTwocategoryList).then(res=>{
-        if (res.data.code === 0) {
-          this.twoCateGory = res.data.data
-          this.$bus.$emit('initWidth')
-        }
+      return new Promise((resolve, reject)=>{
+        this.$http(api.getIndexTwocategoryList).then(res=>{
+          if (res.data.code === 0) {
+            this.twoCateGory = res.data.data
+            this.$bus.$emit('initWidth')
+            resolve()
+          }
+        }).catch(() => {
+          reject()
+        })
       })
     },
+    //获取首页列表
     getIndexGoodsList () {
-      this.$http(`${api.getRecommendList}?page=${this.page}`).then(res=>{
-        console.log(res)
-        if (res.data.code === 0) {
-          this.goodsList = res.data.data
-        }
+      return new Promise((resolve, reject) => {
+        this.$http(`${api.getRecommendList}?page=${this.page}`).then(res=>{
+          console.log(res)
+          if (res.data.code === 0) {
+            this.goodsList = res.data.data
+            resolve()
+          }
+        }).catch(() => {
+          reject()
+        })
+      })
+
+    },
+    getIndexData () {
+      wx.showLoading()
+      Promise.all([this.getIndexTwocategoryList(),this.getIndexGoodsList()]).then(() => {
+        wx.hideLoading()
+        wx.stopPullDownRefresh()
+      }).catch(() => {
+        wx.hideLoading()
+        wx.stopPullDownRefresh()
       })
     },
     initEvent () {
@@ -80,16 +104,24 @@ export default {
     showSearchView () {
       this.isShowSearch = true
     },
-    handClick () {
+    handClick (e) {
       this.$router.push({
-        path : '/pages/goodsDetail/main'
+        path : '/pages/goodsDetail/main',
+        query : {
+          ...e
+        }
       })
+    },
+    //下拉刷新
+    onPullDownRefresh () {
+      this.getIndexData()
     }
   }
 }
 </script>
 
 <style lang="scss">
+  .Index { height: 100%;}
   .header{
     height: 80rpx;
     .header-wrap{

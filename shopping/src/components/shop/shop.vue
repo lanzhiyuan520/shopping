@@ -2,17 +2,17 @@
   <div class="shop">
     <div class="shop-info">
       <div class="shop-img">
-        <img src="../../../static/images/apple.jpg" />
+        <img :src="'http://localhost:3006'+shopImg" />
       </div>
-      <div class="shop-name">apple官方旗舰店</div>
+      <div class="shop-name">{{shopName}}</div>
     </div>
     <div class="shop-count-box">
       <div class="shop-collection">
-        <div class="shop-count">11111</div>
+        <div class="shop-count">{{collectionCount}}</div>
         <div class="shop-text">收藏人数</div>
       </div>
       <div class="shop-all-goods">
-        <div class="shop-count">11111</div>
+        <div class="shop-count">{{allGoodsCount}}</div>
         <div class="shop-text">全部商品</div>
       </div>
     </div>

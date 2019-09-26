@@ -19,6 +19,18 @@
   export default {
     name: "goodsItem",
     props : {
+      id : {
+        type : [String,Number],
+        required : true
+      },
+      shopId : {
+        type : [String,Number],
+        required : true
+      },
+      twoCategoryId : {
+        type : [String,Number],
+        required : true
+      },
       title : {
         type : String,
         default : ''
@@ -35,7 +47,11 @@
     },
     methods : {
       eventsClick () {
-        this.$emit('handClick')
+        this.$emit('handClick',{
+          id : this.id,
+          shop_id : this.shopId,
+          two_category_id: this.twoCategoryId
+        })
       }
     }
   };

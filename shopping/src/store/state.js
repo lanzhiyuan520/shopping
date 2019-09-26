@@ -1,4 +1,5 @@
 export default {
   systemInfo : {},
-  listWidth : null
+  listWidth : null,
+  userInfo : {}
 }

@@ -4,5 +4,9 @@ export default {
   },
   SETINDEXLISTWIDTH : (state,{width}) => {
     state.listWidth = width
+  },
+  SERUSERINFO : (state,data) => {
+    console.log(data)
+    state.userInfo = data
   }
 }

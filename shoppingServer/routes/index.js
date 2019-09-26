@@ -7,6 +7,8 @@ const search = require('../services/search')
 const shop = require('../services/shop')
 //商品列表模块
 const goods = require('../services/goods')
+//用户
+const user = require('../services/user')
 const axios = require('axios')
 
 var WXBizDataCrypt = require('./jiemi')
@@ -17,6 +19,9 @@ router.get('/shoppingTwocategory',category.getTwoCategoryList)
 router.get('/searchGoods',search.searchGoods)
 router.get('/shopList',shop.getAllShop)
 router.get('/recommendList',goods.recommend)
+router.get('/goods_detail',goods.goodsDetail)
+router.get('/get_user_info',user.getUserInfo)
+router.post('/authUserInfo',user.authUserInfo)
 
 
 router.get('/get_code', async ctx => {
