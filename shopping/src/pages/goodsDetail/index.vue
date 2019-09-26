@@ -122,6 +122,7 @@
     import shop from '../../components/shop/shop'
     import api from "../../config/api";
     import {mapState} from 'vuex'
+    import tools from '../../utils/index'
     export default {
       name: "index",
       data () {
@@ -151,15 +152,7 @@
           console.log(1111)
         },
         getUserInfo (e) {
-          console.log(e)
-          if (e.mp.detail.errMsg === "getUserInfo:ok") {
-            let data = e.mp.detail.userInfo
-            data.id = this.userInfo.id
-            this.$store.dispatch('AUTHUSERINFO',data)
-          } else {
-            wx.showToast({title : '请允许授权',icon : 'none'})
-          }
-
+          tools.getUserInfo(e,this)
         },
         selectAttrEvent (index,arrtIndex,attr_name) {
           let text = ''
@@ -185,7 +178,6 @@
           wx.showLoading({title:'加载中'})
           let {id,shop_id,two_category_id} = this.query
           this.$http(`${api.goodsDetail}?id=${id}&shop_id=${shop_id}&two_category_id=${two_category_id}`).then(res=>{
-            console.log(res)
             wx.hideLoading()
             if (res.data.code === 0) {
               this.detailData = res.data.data
@@ -194,7 +186,6 @@
                   select : null
                 })
               }
-              console.log(this.selectAttr)
             }
           })
         }

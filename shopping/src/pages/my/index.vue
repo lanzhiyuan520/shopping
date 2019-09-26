@@ -76,6 +76,7 @@
 
 <script>
   import { mapState } from 'vuex'
+  import tools from '../../utils/index'
   export default {
     name: "index",
     data () {
@@ -86,15 +87,12 @@
     computed : {
       ...mapState(['userInfo'])
     },
+    onLoad () {
+      console.log(this.userInfo)
+    },
     methods : {
       getUserInfo (e) {
-        if (e.mp.detail.errMsg === "getUserInfo:ok") {
-          let data = e.mp.detail.userInfo
-          data.id = this.userInfo.id
-          this.$store.dispatch('AUTHUSERINFO',data)
-        } else {
-          wx.showToast({title : '请允许授权',icon : 'none'})
-        }
+        tools.getUserInfo(e,this)
       }
     }
   };

@@ -8,7 +8,7 @@ export default {
         commit('SERUSERINFO',res.data.data)
         wx.showToast({ title: '授权成功'})
       }else {
-        wx.showToast({title : '请允许授权',icon : 'none'})
+        wx.showToast({title : '授权失败',icon : 'none'})
       }
     })
   }

@@ -20,6 +20,7 @@ export default {
         success : res => {
           this.$http(`${api.getUserInfo}?code=${res.code}`).then(resData => {
             if (resData.data.code === 0) {
+              console.log(resData)
               this.$store.commit('SERUSERINFO',resData.data.data)
             }
           })

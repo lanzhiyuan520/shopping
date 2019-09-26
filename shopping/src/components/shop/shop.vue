@@ -17,13 +17,20 @@
       </div>
     </div>
     <div class="shop-button">
-      <button class="collection-shop">收藏店铺</button>
+      <block v-if="userInfo.nick_name">
+        <button class="collection-shop">收藏店铺</button>
+      </block>
+      <block v-else>
+        <button class="collection-shop" open-type="getUserInfo" @getuserinfo="getUserInfo">收藏店铺</button>
+      </block>
       <button class="collection-open">进入店铺</button>
     </div>
   </div>
 </template>
 
 <script>
+    import { mapState } from 'vuex'
+    import tools from '../../utils/index'
     export default {
       name: "shop",
       props : {
@@ -37,6 +44,14 @@
           type : Number,
           default : 0
         },
+      },
+      computed : {
+        ...mapState(['userInfo'])
+      },
+      methods : {
+        getUserInfo (e) {
+          tools.getUserInfo(e,this)
+        }
       }
     }
 </script>

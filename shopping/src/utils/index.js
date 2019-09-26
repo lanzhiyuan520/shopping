@@ -1,24 +1,15 @@
-function formatNumber (n) {
-  const str = n.toString()
-  return str[1] ? str : `0${str}`
-}
-
-export function formatTime (date) {
-  const year = date.getFullYear()
-  const month = date.getMonth() + 1
-  const day = date.getDate()
-
-  const hour = date.getHours()
-  const minute = date.getMinutes()
-  const second = date.getSeconds()
-
-  const t1 = [year, month, day].map(formatNumber).join('/')
-  const t2 = [hour, minute, second].map(formatNumber).join(':')
-
-  return `${t1} ${t2}`
+const getUserInfo = (e,that,id) => {
+  if (e.mp.detail.errMsg === "getUserInfo:ok") {
+    let userInfo = that.$store.state.userInfo
+    let data = e.mp.detail.userInfo
+    console.log(id)
+    data.id = userInfo.id
+    that.$store.dispatch('AUTHUSERINFO',data)
+  } else {
+    wx.showToast({title : '请允许授权',icon : 'none'})
+  }
 }
 
 export default {
-  formatNumber,
-  formatTime
+  getUserInfo
 }
