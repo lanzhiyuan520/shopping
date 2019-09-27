@@ -50,8 +50,10 @@
         <shop
           :shop-img="detailData.shopData.shop_img"
           :shop-name="detailData.shopData.name"
-          :collection-count="detailData.shopData.collection"
+          :collection-count="detailData.shopData.collectionCount"
           :all-goods-count="detailData.shop_goods_total"
+          :shop-id="detailData.shop_id"
+          :collection-state="detailData.shopData.collectionState"
         ></shop>
       </div>
       <div class="goods-detail-img">
@@ -177,7 +179,9 @@
         getGoodsData () {
           wx.showLoading({title:'加载中'})
           let {id,shop_id,two_category_id} = this.query
-          this.$http(`${api.goodsDetail}?id=${id}&shop_id=${shop_id}&two_category_id=${two_category_id}`).then(res=>{
+          let user_id = this.userInfo.id
+          this.$http(`${api.goodsDetail}?id=${id}&shop_id=${shop_id}&two_category_id=${two_category_id}&user_id=${user_id}`).then(res=>{
+            console.log(res)
             wx.hideLoading()
             if (res.data.code === 0) {
               this.detailData = res.data.data

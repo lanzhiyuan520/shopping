@@ -9,6 +9,7 @@ const api = {
   goodsDetail : `${host}/goods_detail`,
   getUserInfo : `${host}/get_user_info`,
   authUserInfo : `${host}/authUserInfo`,
+  collectionShop : `${host}/collectionShop`
 }
 
 export default api

@@ -21,7 +21,7 @@ const methods = {
         }
     },
     goodsDetail : async ctx => {
-        let { id,shop_id,two_category_id } = ctx.request.query
+        let { id,shop_id,two_category_id,user_id } = ctx.request.query
         const Sql = `select p.*,group_concat(b.img) banner_list,
         (select count(*) from shop where id=${shop_id}) shop_goods_total, 
         (select count(*) from comments where goods_id=${id}) comments_total
@@ -32,7 +32,13 @@ const methods = {
         let commentsData = await sql(`select id,content,user_name,avatarurl,goods_id,DATE_FORMAT(create_time,'%Y-%m-%d %H:%i') create_time from comments where goods_id=${id} limit 0,1`)
         let goodsDetailData = await sql(`select img detail_img from product_detail where goods_id=${id} order by num`)
         let goodsKey = await sql(`select id,name from product_attr_key where goods_id=${id}`)
-        let shopData = await sql(`select * from shop where id=${shop_id}`)
+        let shopData = await sql(`select s.id,s.name,s.shop_img,(select count(*) from collection where state=${0}) collectionCount from shop s where s.id=${shop_id}`)
+        let collectionState = await sql(`select state collectionState from collection where user_id=${user_id} and shop_id=${shop_id}`)
+        if (collectionState.length !== 0) {
+            shopData[0].collectionState = collectionState[0].collectionState
+        } else {
+            shopData[0].collectionState = 1
+        }
         for (let i =0; i < goodsKey.length;i++) {
             goodsKey[i].data = await sql(`select id attr_id,attr_name from goods_attr where attr_name_id=${goodsKey[i].id}`)
             for (let j = 0;j < goodsKey[i].data.length;j++) {

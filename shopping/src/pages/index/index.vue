@@ -107,15 +107,13 @@ export default {
     handClick (e) {
       this.$router.push({
         path : '/pages/goodsDetail/main',
-        query : {
-          ...e
-        }
+        query : { ...e }
       })
-    },
-    //下拉刷新
-    onPullDownRefresh () {
-      this.getIndexData()
     }
+  },
+  //下拉刷新
+  onPullDownRefresh () {
+    this.getIndexData()
   }
 }
 </script>
